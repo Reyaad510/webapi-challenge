@@ -18,4 +18,26 @@ router.get('/', async (req, res) => {
 })
 
 
+// Create action
+
+router.post('/', async(req, res) => {
+    const newAction = req.body;
+    try {
+        if(!newAction.description || !newAction.notes) {
+            res.status(400).json({ message: "Please provide description and notes!" })
+        } else {
+            const action = await Actions.insert(req.body);
+            res.status(201).json(action);
+        }
+    } catch(err) {
+        res.status(500).json({ error: "Error adding action!" })
+    }
+})
+
+
+
+
+
+
+
 module.exports = router;
