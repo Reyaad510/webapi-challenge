@@ -1,6 +1,7 @@
 const express = require('express');
 
 const Actions = require('./helpers/actionModel');
+const Projects = require('./helpers/projectModel');
 const router = express.Router();
 
 
@@ -23,8 +24,8 @@ router.get('/', async (req, res) => {
 router.post('/', async(req, res) => {
     const newAction = req.body;
     try {
-        if(!newAction.description || !newAction.notes) {
-            res.status(400).json({ message: "Please provide description and notes!" })
+        if(!newAction.description || !newAction.notes || !newAction.project_id) {
+            res.status(400).json({ message: "Please provide description, notes, and project_id!" })
         } else {
             const action = await Actions.insert(req.body);
             res.status(201).json(action);
@@ -33,6 +34,8 @@ router.post('/', async(req, res) => {
         res.status(500).json({ error: "Error adding action!" })
     }
 })
+
+
 
 
 // Update action
