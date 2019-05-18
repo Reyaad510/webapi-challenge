@@ -35,6 +35,27 @@ router.post('/', async(req, res) => {
 })
 
 
+// Update action
+
+router.put('/:id', async(req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+
+    try {
+        const action = await Actions.update(id, changes);
+
+        if(!changes.description || !changes.notes) {
+            res.status(400).json({ message: "Provide desc and note"})
+        } else if(action) {
+            res.status(200).json(action);
+        } else {
+            res.status(404).json({ error: 'Could not find specific ID' })
+        }
+    } catch(err) {
+        res.status(500).json({ error: "Action could not be modified" })
+    }
+})
+
 
 
 

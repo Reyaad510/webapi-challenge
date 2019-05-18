@@ -5,6 +5,9 @@ const Projects = require('./helpers/projectModel');
 const router = express.Router();
 
 
+
+// Get projects
+
 router.get('/', async (req, res) => {
     try {
         const projects = await Projects.get();
@@ -14,6 +17,8 @@ router.get('/', async (req, res) => {
     }
 })
 
+
+// Create projects
 
 router.post('/', async(req, res) => {
     const newProject = req.body;
@@ -26,6 +31,26 @@ router.post('/', async(req, res) => {
         }
     } catch(err) {
         res.status(500).json({ message: 'Error adding project!' })
+    }
+})
+
+// Update project
+
+router.put('/:id', async(req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+
+    try {
+        const project = await Projects.update(id, changes);
+        if(!changes.name || !changes.description) {
+            res.status(400).json({ message: "Provide name and desc"})
+        } else if(project) {
+            res.status(200).json(project);
+        } else {
+            res.status(404).json({ error: 'Could not find specific ID' })
+        }
+    } catch(err) {
+        res.status(500).json({ error: "Project could not be modified" })
     }
 })
 
