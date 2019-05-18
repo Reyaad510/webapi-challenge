@@ -57,6 +57,23 @@ router.put('/:id', async(req, res) => {
 })
 
 
+// Remove action
+
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const removeAction = await Actions.remove(id);
+        if(removeAction > 0) {
+            res.status(200).json({ message: "The action has been deleted" })
+        } else {
+            res.status(500).json({ message: "Post with specific ID not found" })
+        }
+    } catch(err) {
+        res.status(500).json({ error: "Action could not be removed" })
+    }
+})
+
+
 
 
 
